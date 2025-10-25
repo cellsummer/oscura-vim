@@ -39,320 +39,350 @@ let s:difftext     = "#E2E8F0"    " Light gray for diff text (was #303030)
 let s:link         = "#3182CE"    " Blue for links (was #479FFA)
 let s:attr         = "#38A169"    " Green for attributes (was #54C0A3)
 
-" Highlight helper
-execute "command! -nargs=+ Hi hi <args>"
+" Helper function for setting highlight groups
+function! s:Hi(group, fg, bg, attr)
+  let l:cmd = "hi " . a:group
+  if !empty(a:fg)
+    let l:cmd .= " guifg=" . a:fg
+  endif
+  if !empty(a:bg)
+    let l:cmd .= " guibg=" . a:bg
+  endif
+  if !empty(a:attr)
+    let l:cmd .= " gui=" . a:attr . " cterm=" . a:attr
+  endif
+  execute l:cmd
+endfunction
 
 " Editor highlighting
-execute "hi Normal guifg=".s:fg." guibg=".s:bg
-execute "hi Cursor guifg=".s:bg." guibg=".s:cursor." gui=bold"
-execute "hi CursorLine guibg=".s:visual." gui=none"
-execute "hi LineNr guifg=".s:linenum
-execute "hi CursorLineNr guifg=".s:linenum_act
-execute "hi VertSplit guifg=".s:linenum." guibg=".s:bg
-execute "hi StatusLine guifg=".s:fg." guibg=".s:visual." gui=none"
-execute "hi StatusLineNC guifg=".s:comment." guibg=".s:selection." gui=none"
-execute "hi Pmenu guifg=".s:fg." guibg=".s:visual
-execute "hi PmenuSel guifg=".s:bg." guibg=".s:function
-execute "hi PmenuSbar guibg=".s:visual
-execute "hi PmenuThumb guibg=".s:selection
-execute "hi TabLine guifg=".s:comment." guibg=".s:bg." gui=none"
-execute "hi TabLineFill guifg=".s:comment." guibg=".s:bg." gui=none"
-execute "hi TabLineSel guifg=".s:fg." guibg=".s:bg." gui=none"
-execute "hi Search guifg=".s:fg." guibg=".s:search
-execute "hi IncSearch guifg=".s:fg." guibg=".s:search
-execute "hi MatchParen guibg=".s:matchbracket
-execute "hi Visual guibg=".s:visual
-execute "hi NonText guifg=".s:comment." guibg=".s:bg
-execute "hi Todo guifg=".s:function." guibg=".s:bg." gui=italic"
-execute "hi Underlined guifg=".s:link." gui=underline"
-execute "hi Error guifg=".s:error." guibg=".s:bg
-execute "hi ErrorMsg guifg=".s:error." guibg=".s:bg
-execute "hi WarningMsg guifg=".s:warning." guibg=".s:bg
-execute "hi SpecialKey guifg=".s:special." guibg=".s:bg
-execute "hi Title guifg=".s:function." gui=bold"
-execute "hi SignColumn guifg=".s:comment." guibg=".s:bg
-execute "hi DiffAdd guifg=".s:fg." guibg=".s:diffadd
-execute "hi DiffDelete guifg=".s:error." guibg=".s:diffdelete
-execute "hi DiffChange guifg=".s:fg." guibg=".s:diffchange
-execute "hi DiffText guifg=".s:fg." guibg=".s:difftext
-execute "hi Folded guifg=".s:comment." guibg=".s:visual
-execute "hi FoldColumn guifg=".s:comment." guibg=".s:bg
-execute "hi Directory guifg=".s:function." guibg=".s:bg
-execute "hi SpellBad guifg=".s:error." gui=undercurl"
-execute "hi SpellCap guifg=".s:warning." gui=undercurl"
-execute "hi SpellRare guifg=".s:warning." gui=undercurl"
-execute "hi SpellLocal guifg=".s:warning." gui=undercurl"
-execute "hi ColorColumn guibg=".s:visual
-execute "hi QuickFixLine guibg=".s:visual." gui=none"
-execute "hi Conceal guifg=".s:comment." guibg=".s:bg
+call s:Hi("Normal", s:fg, s:bg, "")
+call s:Hi("Cursor", s:bg, s:cursor, "bold")
+" CursorLine set same as background so that it is non obtrusive.
+call s:Hi("CursorLine", "", s:bg, "none")
+call s:Hi("LineNr", s:linenum, "", "")
+call s:Hi("CursorLineNr", s:linenum_act, "", "")
+call s:Hi("VertSplit", s:linenum, s:bg, "")
+call s:Hi("StatusLine", s:fg, "#232323", "none")
+call s:Hi("StatusLineNC", s:comment, "#191919", "none")
+call s:Hi("Pmenu", s:fg, "#2C2C31", "")
+call s:Hi("PmenuSel", s:bg, s:function, "")
+call s:Hi("PmenuSbar", "", "#2C2C31", "")
+call s:Hi("PmenuThumb", "", s:selection, "")
+call s:Hi("TabLine", s:comment, s:bg, "none")
+call s:Hi("TabLineFill", s:comment, s:bg, "none")
+call s:Hi("TabLineSel", s:fg, s:bg, "none")
+call s:Hi("Search", s:bg, s:search, "")
+call s:Hi("IncSearch", s:bg, s:search, "")
+call s:Hi("MatchParen", "", s:matchbracket, "")
+call s:Hi("Visual", "", s:visual, "")
+call s:Hi("NonText", s:comment, "", "")
+call s:Hi("Todo", s:function, s:bg, "italic")
+call s:Hi("Underlined", s:link, "", "underline")
+call s:Hi("Error", s:error, "", "")
+call s:Hi("ErrorMsg", s:error, "", "")
+call s:Hi("WarningMsg", s:warning, "", "")
+call s:Hi("SpecialKey", s:special, "", "")
+call s:Hi("Title", s:function, "", "bold")
+call s:Hi("SignColumn", "", s:bg, "")
+call s:Hi("DiffAdd", "", s:diffadd, "")
+call s:Hi("DiffDelete", s:diffdelete, s:diffdelete, "")
+call s:Hi("DiffChange", "", s:diffchange, "")
+call s:Hi("DiffText", "", s:difftext, "")
+call s:Hi("Folded", s:comment, "#191919", "")
+call s:Hi("FoldColumn", s:comment, s:bg, "")
+call s:Hi("Directory", s:function, "", "")
+call s:Hi("SpellBad", s:error, "", "undercurl")
+call s:Hi("SpellCap", s:warning, "", "undercurl")
+call s:Hi("SpellRare", s:warning, "", "undercurl")
+call s:Hi("SpellLocal", s:warning, "", "undercurl")
+call s:Hi("ColorColumn", "", "#232323", "")
+call s:Hi("QuickFixLine", "", "#232323", "none")
+call s:Hi("Conceal", s:comment, s:bg, "")
 
-" Syntax highlighting
-execute "hi Comment guifg=".s:comment
-execute "hi Constant guifg=".s:constant
-execute "hi String guifg=".s:string
-execute "hi Character guifg=".s:string
-execute "hi Number guifg=".s:number
-execute "hi Boolean guifg=".s:constant
-execute "hi Float guifg=".s:number
-execute "hi Function guifg=".s:function
-execute "hi Identifier guifg=".s:fg
-execute "hi Statement guifg=".s:keyword
-execute "hi Conditional guifg=".s:keyword
-execute "hi Repeat guifg=".s:keyword
-execute "hi Label guifg=".s:keyword
-execute "hi Operator guifg=".s:keyword
-execute "hi Keyword guifg=".s:keyword
-execute "hi Exception guifg=".s:keyword
-execute "hi PreProc guifg=".s:keyword
-execute "hi Include guifg=".s:keyword
-execute "hi Define guifg=".s:keyword
-execute "hi Macro guifg=".s:keyword
-execute "hi PreCondit guifg=".s:keyword
-execute "hi Type guifg=".s:type
-execute "hi StorageClass guifg=".s:keyword
-execute "hi Structure guifg=".s:type
-execute "hi Typedef guifg=".s:type
-execute "hi Special guifg=".s:special
-execute "hi SpecialChar guifg=".s:special
-execute "hi Tag guifg=".s:attr
-execute "hi Delimiter guifg=".s:special
-execute "hi SpecialComment guifg=".s:comment
-execute "hi Debug guifg=".s:warning
-execute "hi WildMenu guifg=".s:fg." guibg=".s:bg
-execute "hi NormalFloat guifg=".s:fg." guibg=".s:visual
-
-" TypeScript specific
-execute "hi typescriptBraces guifg=".s:special
-execute "hi typescriptParens guifg=".s:special
-execute "hi typescriptEndColons guifg=".s:special
-execute "hi typescriptModule guifg=".s:keyword
-execute "hi typescriptImport guifg=".s:keyword
-execute "hi typescriptExport guifg=".s:keyword
-execute "hi typescriptVariable guifg=".s:keyword
-execute "hi typescriptOperator guifg=".s:keyword
-execute "hi typescriptEnumKeyword guifg=".s:keyword
-execute "hi typescriptArrowFunc guifg=".s:keyword
-execute "hi typescriptMethodAccessor guifg=".s:keyword
-execute "hi typescriptAsyncFuncKeyword guifg=".s:keyword
-execute "hi typescriptAwaitKeyword guifg=".s:keyword
-execute "hi typescriptCall guifg=".s:special
-execute "hi typescriptClassName guifg=".s:function
-execute "hi typescriptClassHeritage guifg=".s:function
-execute "hi typescriptInterfaceName guifg=".s:function
-execute "hi typescriptTypeReference guifg=".s:function
-execute "hi typescriptFuncName guifg=".s:function
-execute "hi typescriptMember guifg=".s:function
-execute "hi typescriptObjectLabel guifg=".s:fg
-
-" TSX/JSX Support
-execute "hi tsxAttrib guifg=".s:attr
-execute "hi tsxTag guifg=".s:special
-execute "hi tsxTagName guifg=".s:function
-execute "hi tsxCloseTag guifg=".s:special
-execute "hi tsxCloseString guifg=".s:special
-execute "hi tsxAttributeBraces guifg=".s:special
-execute "hi tsxEqual guifg=".s:special
-execute "hi tsxString guifg=".s:fg
+" Syntax highlighting groups
+call s:Hi("Comment", s:comment, "", "")
+call s:Hi("Constant", s:constant, "", "")
+call s:Hi("String", s:string, "", "")
+call s:Hi("Character", s:string, "", "")
+call s:Hi("Number", s:number, "", "")
+call s:Hi("Boolean", s:constant, "", "")
+call s:Hi("Float", s:number, "", "")
+call s:Hi("Identifier", s:fg, "", "")
+call s:Hi("Function", s:function, "", "")
+call s:Hi("Statement", s:keyword, "", "")
+call s:Hi("Conditional", s:keyword, "", "")
+call s:Hi("Repeat", s:keyword, "", "")
+call s:Hi("Label", s:keyword, "", "")
+call s:Hi("Operator", s:keyword, "", "")
+call s:Hi("Keyword", s:keyword, "", "")
+call s:Hi("Exception", s:keyword, "", "")
+call s:Hi("PreProc", s:keyword, "", "")
+call s:Hi("Include", s:keyword, "", "")
+call s:Hi("Define", s:keyword, "", "")
+call s:Hi("Macro", s:keyword, "", "")
+call s:Hi("PreCondit", s:keyword, "", "")
+call s:Hi("Type", s:type, "", "")
+call s:Hi("StorageClass", s:keyword, "", "")
+call s:Hi("Structure", s:type, "", "")
+call s:Hi("Typedef", s:type, "", "")
+call s:Hi("Special", s:special, "", "")
+call s:Hi("SpecialChar", s:special, "", "")
+call s:Hi("Tag", s:attr, "", "")
+call s:Hi("Delimiter", s:special, "", "")
+call s:Hi("SpecialComment", s:comment, "", "")
+call s:Hi("Debug", s:warning, "", "")
+call s:Hi("WildMenu", s:fg, s:bg, "")
+call s:Hi("NormalFloat", s:fg, "#161616", "")
 
 " HTML
-execute "hi htmlTag guifg=".s:special
-execute "hi htmlEndTag guifg=".s:special
-execute "hi htmlTagName guifg=".s:function
-execute "hi htmlArg guifg=".s:attr
-execute "hi htmlTitle guifg=".s:fg
+call s:Hi("htmlTag", s:special, "", "")
+call s:Hi("htmlEndTag", s:special, "", "")
+call s:Hi("htmlTagName", s:function, "", "")
+call s:Hi("htmlArg", s:attr, "", "")
+call s:Hi("htmlTitle", s:fg, "", "")
 
 " CSS
-execute "hi cssClassName guifg=".s:function
-execute "hi cssIdentifier guifg=".s:function
-execute "hi cssTagName guifg=".s:function
-execute "hi cssColor guifg=".s:constant
-execute "hi cssBraces guifg=".s:special
-execute "hi cssAttr guifg=".s:attr
-execute "hi cssAttrRegion guifg=".s:attr
-execute "hi cssDefinition guifg=".s:attr
-execute "hi cssVendor guifg=".s:attr
-execute "hi cssImportant guifg=".s:attr
+call s:Hi("cssClassName", s:function, "", "")
+call s:Hi("cssIdentifier", s:function, "", "")
+call s:Hi("cssTagName", s:function, "", "")
+call s:Hi("cssColor", s:constant, "", "")
+call s:Hi("cssBraces", s:special, "", "")
+call s:Hi("cssAttr", s:attr, "", "")
+call s:Hi("cssAttrRegion", s:attr, "", "")
+call s:Hi("cssDefinition", s:attr, "", "")
+call s:Hi("cssVendor", s:attr, "", "")
+call s:Hi("cssImportant", s:attr, "", "")
 
 " JavaScript
-execute "hi javaScript guifg=".s:fg
-execute "hi javaScriptBraces guifg=".s:special
-execute "hi javaScriptNumber guifg=".s:constant
-execute "hi javaScriptNull guifg=".s:constant
-execute "hi javaScriptIdentifier guifg=".s:keyword
-execute "hi javaScriptOperator guifg=".s:keyword
-execute "hi javaScriptFunction guifg=".s:keyword
-execute "hi javaScriptRegexpString guifg=".s:string
-execute "hi javaScriptGlobal guifg=".s:type
-execute "hi javaScriptMessage guifg=".s:type
-execute "hi javaScriptThis guifg=".s:special
+call s:Hi("javaScript", s:fg, "", "")
+call s:Hi("javaScriptBraces", s:special, "", "")
+call s:Hi("javaScriptNumber", s:constant, "", "")
+call s:Hi("javaScriptNull", s:constant, "", "")
+call s:Hi("javaScriptIdentifier", s:keyword, "", "")
+call s:Hi("javaScriptOperator", s:keyword, "", "")
+call s:Hi("javaScriptFunction", s:keyword, "", "")
+call s:Hi("javaScriptRegexpString", s:string, "", "")
+call s:Hi("javaScriptGlobal", s:type, "", "")
+call s:Hi("javaScriptMessage", s:type, "", "")
+call s:Hi("javaScriptThis", s:special, "", "")
 
 " Python
-execute "hi pythonBuiltin guifg=".s:function." gui=bold"
-execute "hi pythonStatement guifg=".s:keyword
-execute "hi pythonConditional guifg=".s:keyword
-execute "hi pythonRepeat guifg=".s:keyword
-execute "hi pythonException guifg=".s:keyword
-execute "hi pythonInclude guifg=".s:keyword
-execute "hi pythonDecorator guifg=".s:attr
-execute "hi pythonFunction guifg=".s:function
-execute "hi pythonClass guifg=".s:function
-execute "hi pythonOperator guifg=".s:keyword
-execute "hi pythonSelf guifg=".s:special
-execute "hi pythonDottedName guifg=".s:special
-execute "hi pythonComment guifg=".s:comment." gui=italic"
-execute "hi pythonDocstring guifg=".s:comment." gui=italic"
-execute "hi pythonString guifg=".s:string
-execute "hi pythonQuotes guifg=".s:string
-execute "hi pythonTripleQuotes guifg=".s:string
+call s:Hi("pythonBuiltin", s:function, "", "bold")
+call s:Hi("pythonStatement", s:keyword, "", "")
+call s:Hi("pythonConditional", s:keyword, "", "")
+call s:Hi("pythonRepeat", s:keyword, "", "")
+call s:Hi("pythonException", s:keyword, "", "")
+call s:Hi("pythonInclude", s:keyword, "", "")
+call s:Hi("pythonDecorator", s:attr, "", "")
+call s:Hi("pythonFunction", s:function, "", "")
+call s:Hi("pythonClass", s:function, "", "")
+call s:Hi("pythonOperator", s:keyword, "", "")
+call s:Hi("pythonSelf", s:special, "", "")
+call s:Hi("pythonDottedName", s:special, "", "")
+call s:Hi("pythonComment", s:comment, "", "italic")
+call s:Hi("pythonDocstring", s:comment, "", "italic")
+call s:Hi("pythonString", s:string, "", "")
+call s:Hi("pythonQuotes", s:string, "", "")
+call s:Hi("pythonTripleQuotes", s:string, "", "")
 
 " Markdown
-execute "hi markdownHeadingDelimiter guifg=".s:function." gui=bold"
-execute "hi markdownH1 guifg=".s:function." gui=bold"
-execute "hi markdownH2 guifg=".s:function." gui=bold"
-execute "hi markdownH3 guifg=".s:function." gui=bold"
-execute "hi markdownH4 guifg=".s:function." gui=bold"
-execute "hi markdownH5 guifg=".s:function." gui=bold"
-execute "hi markdownH6 guifg=".s:function." gui=bold"
-execute "hi markdownCode guifg=".s:special
-execute "hi markdownCodeBlock guifg=".s:special
-execute "hi markdownCodeDelimiter guifg=".s:special
-execute "hi markdownBlockquote guifg=".s:comment
-execute "hi markdownListMarker guifg=".s:function
-execute "hi markdownOrderedListMarker guifg=".s:function
-execute "hi markdownRule guifg=".s:special
-execute "hi markdownHeadingRule guifg=".s:special
-execute "hi markdownUrlDelimiter guifg=".s:special
-execute "hi markdownLinkDelimiter guifg=".s:special
-execute "hi markdownLinkTextDelimiter guifg=".s:special
-execute "hi markdownHeadingDelimiter guifg=".s:special
-execute "hi markdownUrl guifg=".s:link
-execute "hi markdownUrlTitleDelimiter guifg=".s:string
-execute "hi markdownLinkText guifg=".s:function." gui=underline"
-execute "hi markdownIdDeclaration guifg=".s:function
+call s:Hi("markdownHeadingDelimiter", s:function, "", "")
+call s:Hi("markdownH1", s:function, "", "bold")
+call s:Hi("markdownH2", s:function, "", "bold")
+call s:Hi("markdownH3", s:function, "", "bold")
+call s:Hi("markdownH4", s:function, "", "bold")
+call s:Hi("markdownH5", s:function, "", "bold")
+call s:Hi("markdownH6", s:function, "", "bold")
+call s:Hi("markdownCode", s:special, "", "")
+call s:Hi("markdownCodeBlock", s:special, "", "")
+call s:Hi("markdownCodeDelimiter", s:special, "", "")
+call s:Hi("markdownBlockquote", s:comment, "", "")
+call s:Hi("markdownListMarker", s:function, "", "")
+call s:Hi("markdownOrderedListMarker", s:function, "", "")
+call s:Hi("markdownRule", s:special, "", "")
+call s:Hi("markdownHeadingRule", s:special, "", "")
+call s:Hi("markdownUrlDelimiter", s:special, "", "")
+call s:Hi("markdownLinkDelimiter", s:special, "", "")
+call s:Hi("markdownLinkTextDelimiter", s:special, "", "")
+call s:Hi("markdownHeadingDelimiter", s:special, "", "")
+call s:Hi("markdownUrl", s:link, "", "")
+call s:Hi("markdownUrlTitleDelimiter", s:string, "", "")
+call s:Hi("markdownLinkText", s:function, "", "underline")
+call s:Hi("markdownIdDeclaration", s:function, "", "")
 
 " JSON
-execute "hi jsonKeyword guifg=".s:function
-execute "hi jsonString guifg=".s:string
-execute "hi jsonBoolean guifg=".s:constant
-execute "hi jsonNumber guifg=".s:constant
-execute "hi jsonQuote guifg=".s:special
-execute "hi jsonBraces guifg=".s:special
-execute "hi jsonNull guifg=".s:constant
+call s:Hi("jsonKeyword", s:function, "", "")
+call s:Hi("jsonString", s:string, "", "")
+call s:Hi("jsonBoolean", s:constant, "", "")
+call s:Hi("jsonNumber", s:constant, "", "")
+call s:Hi("jsonQuote", s:special, "", "")
+call s:Hi("jsonBraces", s:special, "", "")
+call s:Hi("jsonNull", s:constant, "", "")
+
+" Terminal
+if has("nvim")
+  let g:terminal_color_0 = s:bg
+  let g:terminal_color_1 = s:error
+  let g:terminal_color_2 = s:function
+  let g:terminal_color_3 = s:string
+  let g:terminal_color_4 = s:special
+  let g:terminal_color_5 = s:keyword
+  let g:terminal_color_6 = s:attr
+  let g:terminal_color_7 = s:fg
+  let g:terminal_color_8 = s:comment
+  let g:terminal_color_9 = s:error
+  let g:terminal_color_10 = s:function
+  let g:terminal_color_11 = s:string
+  let g:terminal_color_12 = s:special
+  let g:terminal_color_13 = s:keyword
+  let g:terminal_color_14 = s:attr
+  let g:terminal_color_15 = s:fg
+endif
 
 " TreeSitter support (for Neovim)
 if has("nvim")
   " Identifiers
-  execute "hi! link @variable guifg=".s:fg
-  execute "hi! link @variable.builtin guifg=".s:special
-  execute "hi! link @variable.parameter guifg=".s:special
-  execute "hi! link @variable.member guifg=".s:fg
-  execute "hi! link @constant guifg=".s:constant
-  execute "hi! link @constant.builtin guifg=".s:special
-  execute "hi! link @constant.macro guifg=".s:keyword
-  execute "hi! link @module guifg=".s:function
-  execute "hi! link @label guifg=".s:keyword
-  execute "hi! link @symbol guifg=".s:special
+  hi! link @variable Identifier
+  hi! link @variable.builtin Special
+  hi! link @variable.parameter Special
+  hi! link @variable.member Identifier
+  hi! link @constant Constant
+  hi! link @constant.builtin Special
+  hi! link @constant.macro Define
+  hi! link @module Type
+  hi! link @label Label
+  hi! link @symbol Special
 
   " Functions
-  execute "hi! link @function guifg=".s:function
-  execute "hi! link @function.builtin guifg=".s:special
-  execute "hi! link @function.macro guifg=".s:keyword
-  execute "hi! link @method guifg=".s:function
-  execute "hi! link @constructor guifg=".s:function
-  execute "hi! link @parameter guifg=".s:special
+  hi! link @function Function
+  hi! link @function.builtin Special
+  hi! link @function.macro Macro
+  hi! link @method Function
+  hi! link @constructor Function
+  hi! link @parameter Special
 
   " Keywords
-  execute "hi! link @keyword guifg=".s:keyword
-  execute "hi! link @keyword.function guifg=".s:keyword
-  execute "hi! link @keyword.operator guifg=".s:keyword
-  execute "hi! link @keyword.return guifg=".s:keyword
-  execute "hi! link @conditional guifg=".s:keyword
-  execute "hi! link @repeat guifg=".s:keyword
-  execute "hi! link @debug guifg=".s:warning
-  execute "hi! link @exception guifg=".s:keyword
-  execute "hi! link @include guifg=".s:keyword
-  execute "hi! link @define guifg=".s:keyword
+  hi! link @keyword Keyword
+  hi! link @keyword.function Keyword
+  hi! link @keyword.operator Operator
+  hi! link @keyword.return Keyword
+  hi! link @conditional Conditional
+  hi! link @repeat Repeat
+  hi! link @debug Debug
+  hi! link @exception Exception
+  hi! link @include Include
+  hi! link @define Define
 
   " Types
-  execute "hi! link @type guifg=".s:type
-  execute "hi! link @type.builtin guifg=".s:type
-  execute "hi! link @type.qualifier guifg=".s:keyword
-  execute "hi! link @type.definition guifg=".s:type
-  execute "hi! link @storageclass guifg=".s:keyword
-  execute "hi! link @namespace guifg=".s:fg
-  execute "hi! link @attribute guifg=".s:special
-  execute "hi! link @property guifg=".s:fg
-  execute "hi! link @field guifg=".s:fg
+  hi! link @type Type
+  hi! link @type.builtin Type
+  hi! link @type.qualifier StorageClass
+  hi! link @type.definition Typedef
+  hi! link @storageclass StorageClass
+  hi! link @namespace Identifier
+  hi! link @attribute Special
+  hi! link @property Identifier
+  hi! link @field Identifier
 
   " Literals
-  execute "hi! link @string guifg=".s:string
-  execute "hi! link @string.regex guifg=".s:string
-  execute "hi! link @string.escape guifg=".s:special
-  execute "hi! link @string.special guifg=".s:special
-  execute "hi! link @character guifg=".s:string
-  execute "hi! link @character.special guifg=".s:special
-  execute "hi! link @boolean guifg=".s:constant
-  execute "hi! link @number guifg=".s:number
-  execute "hi! link @float guifg=".s:number
+  hi! link @string String
+  hi! link @string.regex String
+  hi! link @string.escape SpecialChar
+  hi! link @string.special SpecialChar
+  hi! link @character Character
+  hi! link @character.special SpecialChar
+  hi! link @boolean Boolean
+  hi! link @number Number
+  hi! link @float Float
 
   " Markup
-  execute "hi! link @text.strong guifg=".s:fg
-  execute "hi! link @text.emphasis guifg=".s:fg
-  execute "hi! link @text.underline guifg=".s:fg
-  execute "hi! link @text.strike guifg=".s:comment
-  execute "hi! link @text.title guifg=".s:function
-  execute "hi! link @text.literal guifg=".s:string
-  execute "hi! link @text.uri guifg=".s:fg." gui=underline"
-  execute "hi! link @text.reference guifg=".s:fg
-  execute "hi! link @tag guifg=".s:special
-  execute "hi! link @tag.attribute guifg=".s:keyword
-  execute "hi! link @tag.delimiter guifg=".s:special
+  hi! link @text.strong Bold
+  hi! link @text.emphasis Italic
+  hi! link @text.underline Underlined
+  hi! link @text.strike Comment
+  hi! link @text.title Title
+  hi! link @text.literal String
+  hi! link @text.uri Underlined
+  hi! link @text.reference Identifier
+  hi! link @tag Tag
+  hi! link @tag.attribute Label
+  hi! link @tag.delimiter Special
 
   " Comments
-  execute "hi! link @comment guifg=".s:comment
-  execute "hi! link @comment.documentation guifg=".s:comment
+  hi! link @comment Comment
+  hi! link @comment.documentation SpecialComment
 
   " Punctuation
-  execute "hi! link @punctuation.delimiter guifg=".s:special
-  execute "hi! link @punctuation.bracket guifg=".s:special
-  execute "hi! link @punctuation.special guifg=".s:special
+  hi! link @punctuation.delimiter Delimiter
+  hi! link @punctuation.bracket Delimiter
+  hi! link @punctuation.special Delimiter
 
   " Misc
-  execute "hi! link @error guifg=".s:error
-  execute "hi! link @danger guifg=".s:error
-  execute "hi! link @todo guifg=".s:function." gui=italic"
+  hi! link @error Error
+  hi! link @danger Error
+  hi! link @todo Todo
 endif
 
-" Additional TypeScript/JavaScript specific highlights
-execute "hi typescriptCall guifg=".s:fg
-execute "hi typescriptBinaryOp guifg=".s:keyword
-execute "hi typescriptUnaryOp guifg=".s:keyword
-execute "hi typescriptAssign guifg=".s:keyword
-execute "hi typescriptConstructSignature guifg=".s:keyword
-execute "hi typescriptFuncType guifg=".s:special
-execute "hi typescriptTemplateSubstitution guifg=".s:string
-execute "hi typescriptTemplateSB guifg=".s:special
-execute "hi typescriptTypeAnnotation guifg=".s:special
-execute "hi typescriptTypeBrackets guifg=".s:special
-execute "hi typescriptTypeParameter guifg=".s:function
-execute "hi typescriptDecorator guifg=".s:attr
+" TypeScript/JavaScript Specific
+call s:Hi("typescriptBraces", s:special, "", "")
+call s:Hi("typescriptParens", s:special, "", "")
+call s:Hi("typescriptEndColons", s:special, "", "")
+call s:Hi("typescriptModule", s:keyword, "", "")
+call s:Hi("typescriptImport", s:keyword, "", "")
+call s:Hi("typescriptExport", s:keyword, "", "")
+call s:Hi("typescriptVariable", s:keyword, "", "")
+call s:Hi("typescriptOperator", s:keyword, "", "")
+call s:Hi("typescriptEnumKeyword", s:keyword, "", "")
+call s:Hi("typescriptArrowFunc", s:keyword, "", "")
+call s:Hi("typescriptMethodAccessor", s:keyword, "", "")
+call s:Hi("typescriptAsyncFuncKeyword", s:keyword, "", "")
+call s:Hi("typescriptAwaitKeyword", s:keyword, "", "")
+call s:Hi("typescriptCall", s:special, "", "")
+call s:Hi("typescriptClassName", s:function, "", "")
+call s:Hi("typescriptClassHeritage", s:function, "", "")
+call s:Hi("typescriptInterfaceName", s:function, "", "")
+call s:Hi("typescriptTypeReference", s:function, "", "")
+call s:Hi("typescriptFuncName", s:function, "", "")
+call s:Hi("typescriptMember", s:function, "", "")
+call s:Hi("typescriptObjectLabel", s:fg, "", "")
+call s:Hi("typescriptCall", s:fg, "", "")
+call s:Hi("typescriptBinaryOp", s:keyword, "", "")
+call s:Hi("typescriptUnaryOp", s:keyword, "", "")
+call s:Hi("typescriptAssign", s:keyword, "", "")
+call s:Hi("typescriptConstructSignature", s:keyword, "", "")
+call s:Hi("typescriptFuncType", s:special, "", "")
 
 " String Literals in TypeScript/JavaScript
-execute "hi typescriptStringLiteralType guifg=".s:attr
-execute "hi typescriptStringProperty guifg=".s:attr
-execute "hi typescriptObjectPropertyKey guifg=".s:attr
-execute "hi typescriptTemplateLiteral guifg=".s:string
-execute "hi typescriptString guifg=".s:string
-execute "hi typescriptStringS guifg=".s:string
-execute "hi typescriptStringD guifg=".s:string
-execute "hi typescriptStringB guifg=".s:string
+call s:Hi("typescriptStringLiteralType", s:attr, "", "")
+call s:Hi("typescriptStringProperty", s:attr, "", "")
+call s:Hi("typescriptObjectPropertyKey", s:attr, "", "")
+call s:Hi("typescriptTemplateLiteral", s:string, "", "")
+call s:Hi("typescriptString", s:string, "", "")
+call s:Hi("typescriptStringS", s:string, "", "")
+call s:Hi("typescriptStringD", s:string, "", "")
+call s:Hi("typescriptStringB", s:string, "", "")
 
 " Next.js Directives
-execute "hi typescriptDirective guifg=".s:string
-execute "hi javascriptDirective guifg=".s:string
+call s:Hi("typescriptDirective", s:string, "", "")
+call s:Hi("javascriptDirective", s:string, "", "")
 
 " Import/Export Paths
-execute "hi typescriptImportPath guifg=".s:fg
-execute "hi typescriptExportPath guifg=".s:fg
+call s:Hi("typescriptImportPath", s:fg, "", "")
+call s:Hi("typescriptExportPath", s:fg, "", "")
+
+" TSX/JSX Support
+call s:Hi("tsxAttrib", s:attr, "", "")
+call s:Hi("tsxTag", s:special, "", "")
+call s:Hi("tsxTagName", s:function, "", "")
+call s:Hi("tsxCloseTag", s:special, "", "")
+call s:Hi("tsxCloseString", s:special, "", "")
+call s:Hi("tsxAttributeBraces", s:special, "", "")
+call s:Hi("tsxEqual", s:special, "", "")
+call s:Hi("tsxString", s:fg, "", "")
+
+" Template Strings
+call s:Hi("typescriptTemplate", s:string, "", "")
+call s:Hi("typescriptTemplateSubstitution", s:string, "", "")
+call s:Hi("typescriptTemplateSB", s:special, "", "")
 
 " Done!
