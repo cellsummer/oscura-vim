@@ -12,31 +12,31 @@ endif
 let g:colors_name = "oscura"
 
 " Define colors
-let s:bg           = "#151515"
+let s:bg           = "#1F1F28"
 let s:fg           = "#E6E6E6"
 let s:comment      = "#A3BE8C"
-let s:keyword      = "#c594c5"
+let s:keyword      = "#FFA066"
 let s:function     = "#E6E7A3"
-let s:string       = "#F9B98C"
-let s:number       = "#F9B98C"
-let s:constant     = "#F9B98C"
+let s:string       = "#BDDCDC"
+let s:number       = "#BDDCDC"
+let s:constant     = "#BDDCDC"
 let s:type         = "#E6E7A3"
 let s:error        = "#FF5C5C"
 let s:warning      = "#D2D714"
-let s:special      = "#9592A4"
+let s:special      = "#938AA9"
 let s:visual       = "#4f5b66"
 let s:cursor       = "#FFCC00"
 let s:selection    = "#5A5B63"
 let s:linenum      = "#5A5B63"
 let s:linenum_act  = "#E6E6E6"
 let s:matchbracket = "#5A5B63"
-let s:search       = "#D2D714"
-let s:diffadd      = "#4EBE96"
-let s:diffdelete   = "#FF5C5C"
-let s:diffchange   = "#9592A4"
-let s:difftext     = "#303030"
+let s:search       = "#658594"
+let s:diffadd      = "#2B3328"
+let s:diffdelete   = "#43242B"
+let s:diffchange   = "#49443C"
+let s:difftext     = "#252535"
 let s:link         = "#479FFA"
-let s:attr         = "#54C0A3"
+let s:attr         = "#9CABCA"
 
 " Helper function for setting highlight groups
 function! s:Hi(group, fg, bg, attr)
@@ -70,8 +70,8 @@ call s:Hi("PmenuThumb", "", s:selection, "")
 call s:Hi("TabLine", s:comment, s:bg, "none")
 call s:Hi("TabLineFill", s:comment, s:bg, "none")
 call s:Hi("TabLineSel", s:fg, s:bg, "none")
-call s:Hi("Search", s:bg, s:search, "")
-call s:Hi("IncSearch", s:bg, s:search, "")
+call s:Hi("Search", s:fg, s:search, "")
+call s:Hi("IncSearch", s:fg, s:search, "")
 call s:Hi("MatchParen", "", s:matchbracket, "")
 call s:Hi("Visual", "", s:visual, "")
 call s:Hi("NonText", s:comment, "", "")
@@ -167,19 +167,20 @@ call s:Hi("javaScriptThis", s:special, "", "")
 
 " Python
 call s:Hi("pythonBuiltin", s:function, "", "bold")
+call s:Hi("pythonBuiltinType", s:attr, "", "")
 call s:Hi("pythonStatement", s:keyword, "", "")
 call s:Hi("pythonConditional", s:keyword, "", "")
 call s:Hi("pythonRepeat", s:keyword, "", "")
 call s:Hi("pythonException", s:keyword, "", "")
 call s:Hi("pythonInclude", s:keyword, "", "")
 call s:Hi("pythonDecorator", s:attr, "", "")
+call s:Hi("pythonDottedName", s:attr, "", "")
 call s:Hi("pythonFunction", s:function, "", "")
 call s:Hi("pythonClass", s:function, "", "")
 call s:Hi("pythonOperator", s:keyword, "", "")
 call s:Hi("pythonSelf", s:special, "", "")
-call s:Hi("pythonDottedName", s:special, "", "")
-call s:Hi("pythonComment", s:comment, "", "italic")
-call s:Hi("pythonDocstring", s:comment, "", "italic")
+call s:Hi("pythonComment", s:comment, "", "")
+call s:Hi("pythonDocstring", s:comment, "", "")
 call s:Hi("pythonString", s:string, "", "")
 call s:Hi("pythonQuotes", s:string, "", "")
 call s:Hi("pythonTripleQuotes", s:string, "", "")
@@ -383,5 +384,13 @@ call s:Hi("tsxString", s:fg, "", "")
 call s:Hi("typescriptTemplate", s:string, "", "")
 call s:Hi("typescriptTemplateSubstitution", s:string, "", "")
 call s:Hi("typescriptTemplateSB", s:special, "", "")
+
+" CoC
+call s:Hi("CocWarningHighlight" , s:warning, "", "undercurl")
+call s:Hi("CocErrorHighlight" , s:error, "", "undercurl")
+call s:Hi("CocWarningSign" , s:warning, "", "")
+call s:Hi("CocErrorSign" , s:error, "", "")
+call s:Hi("CocInfoSign" , s:comment, "", "")
+call s:Hi("CocHintSign" , s:special, "", "")
 
 " Done!
