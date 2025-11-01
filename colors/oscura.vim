@@ -387,7 +387,7 @@ call s:Hi("typescriptTemplateSB", s:special, "", "")
 
 " CoC
 call s:Hi("CocWarningHighlight" , s:warning, "", "undercurl")
-call s:Hi("CocErrorHighlight" , s:error, "", "undercurl")
+call s:Hi("CocErrorHighlight" , s:error, s:bg, "undercurl")
 call s:Hi("CocWarningSign" , s:warning, "", "")
 call s:Hi("CocErrorSign" , s:error, "", "")
 call s:Hi("CocInfoSign" , s:comment, "", "")
